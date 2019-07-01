@@ -1598,7 +1598,7 @@ struct Inventory {
             //
         } else {
             StringID str = getItemName(item->desc.str, game->getLevel()->id, item->type);
-            UI::textOut(vec2(eye, UI::height - round(UI::height / 480 * 32)), str, UI::aCenter, UI::width);
+            UI::textOut(vec2(0, UI::height - round(UI::height / 480 * 32)), str, UI::aCenter, UI::width);
         }
 
         renderItemCount(item, vec2(UI::width / 2 - round(UI::height / 480 * 160), UI::height - round(UI::height / 480 * 96)), 320);
@@ -2037,7 +2037,7 @@ struct Inventory {
         }
 
         if (!game->getLevel()->isTitle()) 
-            UI::textOut(vec2(eye, round(UI::height / 480 * 32)), pageTitle[page], UI::aCenter, UI::width);
+            UI::textOut(vec2( 0, round(UI::height / 480 * 32)), pageTitle[page], UI::aCenter, UI::width);
 
         if (canFlipPage(-1)) {
             UI::textOut(vec2(round(UI::height / 480 * 16), round(UI::height / 480 * 32)), "[", UI::aLeft, UI::width);
@@ -2062,10 +2062,10 @@ struct Inventory {
             #endif
 
             sprintf(buf, STR[STR_HELP_SELECT], bSelect);
-            UI::textOut(vec2(eye + dx, UI::height - round(UI::height / 480 * 64)), buf, UI::aLeft, UI::width);
+            UI::textOut(vec2(0 + dx, UI::height - round(UI::height / 480 * 64)), buf, UI::aLeft, UI::width);
             if (chosen) {
                 sprintf(buf, STR[STR_HELP_BACK], bBack);
-                UI::textOut(vec2(eye, UI::height - round(UI::height / 480 * 64)), buf, UI::aRight, UI::width - dx);
+                UI::textOut(vec2(0, UI::height - round(UI::height / 480 * 64)), buf, UI::aRight, UI::width - dx);
             }
         }
 
