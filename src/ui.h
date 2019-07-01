@@ -260,7 +260,11 @@ namespace UI {
     void begin(float aspect) {
         ensureLanguage(Core::settings.audio.language);
 
-        height = 480.0f;
+        #ifdef _OS_3DS
+            height = 384.0f;
+        #else
+            height = 480.0f;
+        #endif
         width  = height * aspect;
 
         Core::mModel.identity();
@@ -635,7 +639,7 @@ namespace UI {
                 delete item.animation;
                 pickups.remove(i);
             } else {
-                vec2 target = vec2(w - 48.0f - (i % 4) * 96.0f, UI::height - 48.0f - (i / 4) * 96.0f);
+                vec2 target = vec2(w - round(UI::height / 480 * 48) - (i % 4) * 96.0f, UI::height - round(UI::height / 480 * 48) - (i / 4) * 96.0f);
                 item.pos = item.pos.lerp(target, Core::deltaTime * 5.0f);
                 i++;
             }
@@ -700,18 +704,18 @@ namespace UI {
 
     void renderHelp() {
     #ifdef _NAPI_SOCKET
-        textOut(vec2(16, height - 32), command, aLeft, width - 32, 255, UI::SHADE_GRAY);
+        textOut(vec2(round(height / 480 * 16), height - round(height / 480 * 32)), command, aLeft, width - 32, 255, UI::SHADE_GRAY);
     #endif
         if (hintTime > 0.0f) {
-            textOut(vec2(16, 32), hintStr, aLeft, width - 32, 255, UI::SHADE_GRAY);
+            textOut(vec2(round(height / 480 * 16), round(height / 480 * 32)), hintStr, aLeft, width - 32, 255, UI::SHADE_GRAY);
         }
 
     #if defined(_OS_WEB) || defined(_OS_WIN) || defined(_OS_LINUX) || defined(_OS_MAC) || defined(_OS_RPI)
         if (showHelp) {
-            textOut(vec2(32, 32), STR_HELP_TEXT, aLeft, width - 32, 255, UI::SHADE_GRAY);
+            textOut(vec2(round(height / 480 * 32), round(height / 480 * 32)), STR_HELP_TEXT, aLeft, width - 32, 255, UI::SHADE_GRAY);
         } else {
             if (helpTipTime > 0.0f) {
-                textOut(vec2(0, height - 16), STR_HELP_PRESS, aCenter, width, 255, UI::SHADE_ORANGE);
+                textOut(vec2(0, height - round(height / 480 * 16)), STR_HELP_PRESS, aCenter, width, 255, UI::SHADE_ORANGE);
             }
         }
     #endif
@@ -719,7 +723,7 @@ namespace UI {
     #ifdef UI_SHOW_FPS
         char buf[256];
         sprintf(buf, "%d", Core::stats.fps);
-        textOut(vec2(0, 16), buf, aLeft, width, 255, UI::SHADE_ORANGE);
+        textOut(vec2(0, round(height / 480 * 16)), buf, aLeft, width, 255, UI::SHADE_ORANGE);
     #endif
     }
 
@@ -728,8 +732,8 @@ namespace UI {
 
         if (subsTime > 0.0f) {
             const char *subs = STR[subsStr] + subsPos;
-            textOut(vec2(16, height - 48) + vec2(1, 1), subs, aCenterV, width - 32, 255, UI::SHADE_GRAY, true);
-            textOut(vec2(16, height - 48), subs, aCenterV, width - 32, 255, UI::SHADE_GRAY);
+            textOut(vec2(round(height / 480 * 16), height - round(height / 480 * 48)) + vec2(1, 1), subs, aCenterV, width - 32, 255, UI::SHADE_GRAY, true);
+            textOut(vec2(round(height / 480 * 16), height - round(height / 480 * 48)), subs, aCenterV, width - 32, 255, UI::SHADE_GRAY);
         }
     }
 
@@ -788,7 +792,7 @@ namespace UI {
         Core::mView.translate(vec3(-Core::eye * CAM_EYE_SEPARATION, 0.0f, 0.0f));
         Core::setViewProj(Core::mView, Core::mProj);
 
-        vec3 lightOffset = vec3(UI::width - 64.0f, UI::height - 64.0f, 2048.0f);
+        vec3 lightOffset = vec3(UI::width - round(UI::height / 480 * 64), UI::height - round(UI::height / 480 * 64), 2048.0f);
         setupInventoryShading(lightOffset);
 
         Basis joints[MAX_SPHERES];

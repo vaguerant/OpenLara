@@ -61,7 +61,7 @@ struct OptionItem {
 
     float drawParam(float x, float y, float w, StringID oStr, bool active, uint8 value) const {
         if (oStr != STR_EMPTY) {
-            UI::textOut(vec2(x + 32.0f, y), oStr);
+            UI::textOut(vec2(x + round(UI::height / 480 * 32), y), oStr);
             x = x + w * 0.5f;
             w = w * 0.5f - 32.0f;
         }
@@ -89,8 +89,8 @@ struct OptionItem {
     }
 
     float drawBar(float x, float y, float w, bool active, uint8 value) const {
-        UI::renderBar(CTEX_WHITE_SPRITE, vec2(x + (32.0f + 2.0f), y - LINE_HEIGHT + 6 + 2), vec2(w - (64.0f + 4.0f), LINE_HEIGHT - 6 - 4), value / float(maxValue), color, 0xFF000000, 0xFFA0A0A0, 0xFFA0A0A0, 0xFF000000);
-        UI::specOut(vec2(x + 16.0f, y), icon);
+        UI::renderBar(CTEX_WHITE_SPRITE, vec2(x + (round(UI::height / 480 * 32) + 2.0f), y - LINE_HEIGHT + 6 + 2), vec2(w - (64.0f + 4.0f), LINE_HEIGHT - 6 - 4), value / float(maxValue), color, 0xFF000000, 0xFFA0A0A0, 0xFFA0A0A0, 0xFF000000);
+        UI::specOut(vec2(x + round(UI::height / 480 * 16), y), icon);
         if (active) {
             if (value >        0) UI::specOut(vec2(x, y), 108);
             if (value < maxValue) UI::specOut(vec2(x + w - 12.0f, y), 109);
@@ -1498,7 +1498,7 @@ struct Inventory {
 
         float eye = getEyeOffset();
 
-        UI::textOut(vec2(eye, 480 - 32), str, UI::aCenter, UI::width);
+        UI::textOut(vec2(eye, UI::height - round(UI::height / 480 * 32)), str, UI::aCenter, UI::width);
         int tw = UI::getTextSize(STR[str]).x;
 
         if (item->value > 0) UI::specOut(vec2((UI::width - tw) * 0.5f - 32.0f + eye, 480 - 32), 108);
@@ -1598,10 +1598,10 @@ struct Inventory {
             //
         } else {
             StringID str = getItemName(item->desc.str, game->getLevel()->id, item->type);
-            UI::textOut(vec2(eye, 480 - 32), str, UI::aCenter, UI::width);
+            UI::textOut(vec2(eye, UI::height - round(UI::height / 480 * 32)), str, UI::aCenter, UI::width);
         }
 
-        renderItemCount(item, vec2(UI::width / 2 - 160, 480 - 96), 320);
+        renderItemCount(item, vec2(UI::width / 2 - round(UI::height / 480 * 160), UI::height - round(UI::height / 480 * 96)), 320);
 
     // show health bar in inventory when selector is over medikit
         if (item->type == TR::Entity::INV_MEDIKIT_BIG || item->type == TR::Entity::INV_MEDIKIT_SMALL) {
@@ -1612,12 +1612,12 @@ struct Inventory {
                 vec2 size = vec2(180, 10);
                 vec2 pos;
                 if (Core::settings.detail.stereo == Core::Settings::STEREO_VR) {
-                    pos = vec2((UI::width - size.x) * 0.5f, 96);
+                    pos = vec2((UI::width - size.x) * 0.5f, round(UI::height / 480 * 96));
                 } else {
                     if (game->getLara(1) && playerIndex == 0) {
-                        pos = vec2(32, 32);
+                        pos = vec2(round(UI::height / 480 * 32), round(UI::height / 480 * 32));
                     } else {
-                        pos = vec2(UI::width - 32 - size.x, 32);
+                        pos = vec2(UI::width - round(UI::height / 480 * 32) - size.x, round(UI::height / 480 * 32));
                     }
                 }
 
@@ -1638,7 +1638,7 @@ struct Inventory {
                 case TR::Entity::INV_GAMMA     :
                 case TR::Entity::INV_STOPWATCH :
                 case TR::Entity::INV_MAP       :
-                    UI::textOut(vec2(0, 240), STR_EMPTY, UI::aCenter, UI::width);
+                    UI::textOut(vec2(0, UI::height / 2), STR_EMPTY, UI::aCenter, UI::width);
                     break;
                 default : ;
             }
@@ -2023,11 +2023,11 @@ struct Inventory {
         float eye = getEyeOffset() * 0.5f;
 
         if (page == PAGE_SAVEGAME) {
-            UI::renderBar(CTEX_OPTION, vec2(UI::width / 2 - 120, 240 - 14), vec2(240, LINE_HEIGHT - 6), 1.0f, 0x802288FF, 0, 0, 0);
-            UI::textOut(vec2(0, 240), pageTitle[page], UI::aCenter, UI::width);
-            UI::renderBar(CTEX_OPTION, vec2(slot + UI::width / 2 - 48, 240 + 24 - 16), vec2(48, 18), 1.0f, 0xFFD8377C, 0);
-            UI::textOut(vec2(UI::width / 2 - 48, 240 + 24), STR_YES, UI::aCenter, 48);
-            UI::textOut(vec2(UI::width / 2, 240 + 24), STR_NO, UI::aCenter, 48);
+            UI::renderBar(CTEX_OPTION, vec2(UI::width / 2 - round(UI::height / 480 * 120), UI::height / 2 - round(UI::height / 480 * 14)), vec2(240, LINE_HEIGHT - 6), 1.0f, 0x802288FF, 0, 0, 0);
+            UI::textOut(vec2(0, UI::height / 2), pageTitle[page], UI::aCenter, UI::width);
+            UI::renderBar(CTEX_OPTION, vec2(slot + UI::width / 2 - round(UI::height / 480 * 48), round(UI::height / 480 * (240 + 24 - 16))), vec2(48, 18), 1.0f, 0xFFD8377C, 0);
+            UI::textOut(vec2(UI::width / 2 - round(UI::height / 480 * 48), round(UI::height / 480 * (240 + 24))), STR_YES, UI::aCenter, 48);
+            UI::textOut(vec2(UI::width / 2, round(UI::height / 480 * (240 + 24))), STR_NO, UI::aCenter, 48);
             return;
         }
 
@@ -2037,16 +2037,16 @@ struct Inventory {
         }
 
         if (!game->getLevel()->isTitle()) 
-            UI::textOut(vec2(eye, 32), pageTitle[page], UI::aCenter, UI::width);
+            UI::textOut(vec2(eye, round(UI::height / 480 * 32)), pageTitle[page], UI::aCenter, UI::width);
 
         if (canFlipPage(-1)) {
-            UI::textOut(vec2(16, 32), "[", UI::aLeft, UI::width);
-            UI::textOut(vec2( 0, 32), "[", UI::aRight, UI::width - 20);
+            UI::textOut(vec2(round(UI::height / 480 * 16), round(UI::height / 480 * 32)), "[", UI::aLeft, UI::width);
+            UI::textOut(vec2( 0, round(UI::height / 480 * 32)), "[", UI::aRight, UI::width - 20);
         }
 
         if (canFlipPage(1)) {
-            UI::textOut(vec2(16, 480 - 16), "]", UI::aLeft, UI::width);
-            UI::textOut(vec2( 0, 480 - 16), "]", UI::aRight, UI::width - 20);
+            UI::textOut(vec2(round(UI::height / 480 * 16), UI::height - round(UI::height / 480 * 16)), "]", UI::aLeft, UI::width);
+            UI::textOut(vec2( 0, UI::height - round(UI::height / 480 * 16)), "]", UI::aRight, UI::width - 20);
         }
 
     // inventory controls help
@@ -2062,10 +2062,10 @@ struct Inventory {
             #endif
 
             sprintf(buf, STR[STR_HELP_SELECT], bSelect);
-            UI::textOut(vec2(eye + dx, 480 - 64), buf, UI::aLeft, UI::width);
+            UI::textOut(vec2(eye + dx, UI::height - round(UI::height / 480 * 64)), buf, UI::aLeft, UI::width);
             if (chosen) {
                 sprintf(buf, STR[STR_HELP_BACK], bBack);
-                UI::textOut(vec2(eye, 480 - 64), buf, UI::aRight, UI::width - dx);
+                UI::textOut(vec2(eye, UI::height - round(UI::height / 480 * 64)), buf, UI::aRight, UI::width - dx);
             }
         }
 
