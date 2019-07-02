@@ -3136,18 +3136,18 @@ struct Level : IGame {
 
             vec2 pos;
             if (Core::settings.detail.stereo == Core::Settings::STEREO_VR)
-                pos = vec2((UI::width - size.x) * 0.5f, round(UI::height / 480 * 96));
+                pos = vec2((UI::width - size.x) * 0.5f, DPI(96));
             else
-                pos = vec2(UI::width - round(UI::height / 480 * 32) - size.x, round(UI::height / 480 * 32));
+                pos = vec2(UI::width - DPI(32) - size.x, DPI(32));
 
             if (!player->dozy && (player->stand == Lara::STAND_ONWATER || player->stand == Character::STAND_UNDERWATER)) {
                 UI::renderBar(CTEX_OXYGEN, pos, size, oxygen);
-                pos.y += round(UI::height / 480 * 16);
+                pos.y += DPI(16);
             }
 
             if ((!inventory->active && ((player->wpnReady() && !player->emptyHands()) || player->damageTime > 0.0f || health <= 0.2f))) {
                 UI::renderBar(CTEX_HEALTH, pos, size, health);
-                pos.y += round(UI::height / 480 * 32);
+                pos.y += DPI(32);
 
                 if (!inventory->active && !player->emptyHands()) { // ammo
                     int index = inventory->contains(player->wpnCurrent);
@@ -3212,7 +3212,7 @@ struct Level : IGame {
             Core::setTarget(NULL, NULL, RT_CLEAR_COLOR | RT_STORE_COLOR);
             UI::begin(float(Core::width) / float(Core::height));
             atlasGlyphs->bind(sDiffuse);
-            UI::textOut(vec2(0, UI::height - round(UI::height / 480 * 16)), STR_LOADING, UI::aCenter, UI::width);
+            UI::textOut(vec2(0, DPI(480 - 16)), STR_LOADING, UI::aCenter, UI::width);
             UI::end();
             return;
         }
