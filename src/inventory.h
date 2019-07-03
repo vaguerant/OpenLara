@@ -2032,7 +2032,7 @@ struct Inventory {
         }
 
         if (page == PAGE_LEVEL_STATS) {
-            showLevelStats(vec2(0, UI::height / 2 - 60));
+            showLevelStats(vec2(0, UI::height / 2 - 75));
             return;
         }
 
